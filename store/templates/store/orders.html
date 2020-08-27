@@ -1,0 +1,50 @@
+{%extends 'store/layout.html'%}
+{%block title%}Orders{%endblock%}
+{%block css%}
+<style>
+.card-img-top {
+    width: 10%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+.card-img,
+.card-img-bottom,
+.card-img-top {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    width: 100%;
+}
+</style>
+{%endblock%}
+{%block body%}{%load%}
+    {%for dc in allown%}
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col"> Customer_Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Contact No.</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    {%for i in dc%}
+            <tr>
+                <th scope="row"><a href="/store/post_by_tag/{{i.id}}" title="">{{i.id}}</a></th>
+                <td><a href="/store/post_by_tag/{{i.id}}" title="">{{i.name}}</a></td>
+                <td><a href="/store/post_by_tag/{{i.id}}" title="">{{i.address}}</a></td>
+                <td><a href="/store/post_by_tag/{{i.id}}" title="">{{i.phone}}</a></td>
+                <td><a href="/store/post_by_tag/{{i.id}}" title="">{{i.email}}</a></td>
+            </tr>
+    {%endfor%}
+        </tbody>
+    </table>
+    
+</div>
+</div>
+    {%endfor%}
+{%endblock%}

@@ -1,0 +1,81 @@
+{%extends 'customer/layout.html'%}
+{%block title%}Contact{%endblock%}
+{%block body%}
+<div class="container my-3">
+    <h3>Contact Us For Any Query</h3>
+    <form action="/customer/contact/" method="post">{% csrf_token %}
+        <div class="form-group">
+            <label for="name">Enter Name</label>
+            <input type="text" class="form-control" id="name" name='name' placeholder="Enter Name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name='email' placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label for="phone">Contact Number With Country Code</label>
+            <input type="phone" class="form-control" id="phone" name='phone' placeholder="Enter Contact Number">
+        </div>
+        <div class="form-group">
+            <label for="desc">Enter Query or Message</label>
+            <textarea class="form-control" id="desc" name='desc' rows="8"></textarea>
+        </div>
+        {%if user.is_authenticated%}
+        <button type="Submit" class="btn btn-light">Submit</button>
+        {%else%}
+        <h5>Login First</h5>
+        <button type="Submit" class="btn btn-light" disabled="">Submit</button>
+        {%endif%}
+</div>
+</form>
+{%endblock%}
+{% block js%}
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+var totalprice = 0;
+
+for (item in cart) {
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    let itemprice = cart[item][2];
+    sum = sum + qty;
+
+
+}
+document.getElementById('cart').innerHTML = sum;
+$('#popcart').popover();
+updatePopover(cart);
+
+function updatePopover(cart) {
+    var popStr = "";
+    popStr = popStr + "<h5> Items in your shopping cart </h5><div class='mx-2 my-2'>";
+    var i = 1;
+
+
+    for (item in cart) {
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        //let itemprice = cart[item][2] * qty;
+        sum = sum + qty;
+        popStr = popStr + "<b>" + i + "</b>.";
+        popStr = popStr + name.slice(0, 20) + "... Qty : <b>" + qty + '</b><br>';
+        i = i + 1;
+    }
+
+    document.getElementById('popcart').setAttribute('data-content', popStr);
+    $('#popcart').popover('hide');
+}
+$('#itemsJson').val(JSON.stringify(cart)); 
+{%if thank%}
+alert('Thanks for Contacting with us. We will revert to you shortly');
+localStorage.clear();
+document.location = "/shop";
+ {%endif%}
+</script>
+{%endblock%}

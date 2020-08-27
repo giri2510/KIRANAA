@@ -1,0 +1,47 @@
+{% extends 'customer/layout.html'%}
+{% block title %} {{product.product_name}} {% endblock %}
+{%block body%}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-4 ">
+            <img src="/MEDIA/{{product.image}}" height="200px" width="216px">
+            <div class="row" style="padding: 12px;">
+                
+                <a href="/customer/"><button class="btn btn-primary cart mx-2">Back</button></a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h5 id="namepr{{product.prod_id}}">{{product.prod_name}}</h5>
+            <span id="pricepr{{product.prod_id}}">
+                <p><b>₹ {{product.prod_price}}</b></p>
+            </span>
+            <h7><p><b>Product Detils :</b> {{product.prod_desc}}</p></h7>
+            <h7><b>Seller :</b> {{product.ownerprod}}</h7>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+var sum = 0;
+var totalprice = 0;
+
+for (item in cart) {
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    let itemprice = cart[item][2];
+    sum = sum + qty;
+
+}
+
+document.getElementById('cart').innerHTML = sum;
+//document.getElementById('totalprice').innerHTML = totalprice;
+$('#itemsJson').val(JSON.stringify(cart));
+</script>
+{%endblock%}

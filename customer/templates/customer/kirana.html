@@ -1,0 +1,11 @@
+{%extends 'customer/layout.html'%}
+{%block body%}
+<div class="container">
+    <h1>Please select your retailer</h1>
+    {%for product,range in allproducts%}
+    <table>
+    	{{product.0.ownerprod}}
+    </table>
+    {%endfor%}
+</div>
+{%endblock%}

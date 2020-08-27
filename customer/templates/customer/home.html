@@ -1,0 +1,33 @@
+{% extends 'customer/layout.html '%}
+{%block title%}Home page{%endblock%}
+{%block body%}
+{%if messages%}
+{%for message in messages%}
+<div class="alert {{message.tags}}" id="msg" role="alert">
+    {{message}}
+</div>
+{%endfor%}
+{%endif%}
+
+<div class="jumbotron">
+    <form method="post">{%csrf_token%}
+        <h1 class="display-4">Welcome to m site!.</h1>
+        <p class="lead">Merchent page</p>
+        <hr class="my-4">
+        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <a class="btn btn-primary btn-lg" href="/store/addproduct/" type="submit">Add Product</a>
+        <a class="btn btn-primary btn-lg" href="/store/productviews/" type="submit">View Product</a>
+    </form>
+   
+    
+</div>
+{%endblock%}
+{% block js %}
+<script>
+setTimeout(function() {
+    if ($('#msg').length > 0) {
+        $('#msg').remove();
+    }
+}, 2000)
+</script>
+{% endblock %}

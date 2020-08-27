@@ -1,0 +1,114 @@
+{% extends 'store/layout.html '%}
+{%block title%}Home page{%endblock%}
+{%block body%}
+{%if messages%}
+{%for message in messages%}
+<div class="alert {{message.tags}}" id="msg" role="alert">
+    {{message}}
+</div>
+{%endfor%}
+{%endif%}
+{% if user.is_authenticated %}
+<div class="jumbotron">
+    <form method="post">{%csrf_token%}
+        <h1 class="display-4">Welcome to m site!.</h1>
+        <p class="lead">Merchent page</p>
+        <hr class="my-4">
+        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <a class="btn btn-primary btn-lg" href="/store/addproduct/" type="submit">Add Product</a>
+        <a class="btn btn-primary btn-lg" href="/store/productviews/" type="submit">View Product</a>
+    </form>
+    {%else%}
+    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#signupLong">
+        Signup
+    </button>
+    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#loginLong">
+        Login
+    </button>
+    {%endif%}
+    <!-- Button trigger modal -->
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupLong" tabindex="-1" role="dialog" aria-labelledby="signupLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupLongTitle">Sign Up</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/store/usersignup/" method="post">{%csrf_token%}
+                        <div class="form-group">
+                            <label for="firstname">First Name</label>
+                            <input type="input" class="form-control" name="firstname" id="firstname" placeholder="Enter First Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last Name</label>
+                            <input type="input" class="form-control" name="lastname" id="lastname" placeholder="Enter last Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="input" class="form-control" name="username" id="username" placeholder="Enter Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password1">Password</label>
+                            <input type="password" class="form-control" name="password1" id="password1" placeholder="Enter Your Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password2">Re-Enter Password </label>
+                            <input type="password" class="form-control" name="password2" id="password2" placeholder="Enter Your Password Again" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginLong" tabindex="-1" role="dialog" aria-labelledby="loginLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginLongTitle">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="userlogin/" method="post">{%csrf_token%}
+                        <div class="form-group">
+                            <label for="loginusername">Username</label>
+                            <input type="input" class="form-control" name="loginusername" value="admin" id="loginusername" placeholder="Enter Username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="psw">Password</label>
+                            <input type="password" class="form-control" name="psw" id="psw" value="giri123456" placeholder="Enter Your Password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{% block js %}
+<script>
+setTimeout(function() {
+    if ($('#msg').length > 0) {
+        $('#msg').remove();
+    }
+}, 2000)
+</script>
+{% endblock %}

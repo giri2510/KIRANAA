@@ -1,0 +1,114 @@
+{%extends 'store/layout.html'%}
+{%block title%}Update{%endblock%}
+{%block body%}
+{%block css%}
+<style>
+    img{
+max-height: 180px;
+max-width: 180px;
+vertical-align: middle;
+border-style: dashed;
+}
+</style>
+{%endblock%}
+{%if messages%}
+{%for message in messages%}
+<div class="alert {{message.tags}}" id="msg" role="alert">
+    {{message}}
+</div>
+{%endfor%}
+{%endif%}
+<div class="container my-4">
+    <h2> Details about Product </h2>
+    <div class="row my-4">
+        <div class="col-md-4 ">
+            <img src="/MEDIA/{{product.image}}" height="200px" width="216px">
+            <div class="row" style="padding: 12px;">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h5><b>Product Name : </b>{{product.prod_name}}</h5>
+            <p><b>Product Price : </b>₹ {{product.prod_price}}</p>
+            <p><b>Product Descriptions :</b>{{product.prod_desc}}</p>
+            <p><b>Product Category :</b>{{product.prod_category}}</p>
+            <p><b>Product Subcategory :</b>{{product.prod_subcategory}}</p>
+        </div>
+        <div class="row my-4">
+            <h2> Enter Below New Details about Product</h2>
+        </div>
+    </div>
+    <form method='post' enctype="multipart/form-data">{%csrf_token%}
+        {% if user.is_authenticated %}
+        <div class="form-group">
+            <label>
+                <h3>{{request.user}}</h3>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="updateprodname">Enter Product Name</label>
+            <input type="text" class="form-control" id="updateprodname" value="{{product.prod_name}}" name="updateprodname">
+        </div>
+        <div class="form-group">
+            <label for="updateprice">Enter Price</label>
+            <input type="text" class="form-control" id="updateprice" name="updateprice" value="{{product.prod_price}}">
+        </div>
+        <div class="form-group">
+            <label for="updatecategory">Enter Category</label>
+            <input type="text" class="form-control" id="updatecategory" name="updatecategory" value="{{product.prod_category}}">
+        </div>
+        <div class="form-group">
+            <label for="updatesubcategory">Enter Sub-Category</label>
+            <input type="text" class="form-control" id="updatesubcategory" value="{{product.prod_subcategory}}" name="updatesubcategory">
+        </div>
+        <div class="form-group">
+            <label for="updatedesc">Enter Description</label>
+            <textarea class="form-control" id="updatedesc" name="updatedesc" rows="3" value="{{product.prod_desc}}">{{product.prod_desc}}
+                
+            </textarea>
+        </div>
+        <div><span id="upimg">
+                <button onclick="myFunction()">Upload Image</button></span>
+            <!--label>Upload Image</label>
+            <input type='file' name="updateimage" id="updateimage" accept="image/*" onchange="readingURL(this);" />
+            <img id="upblah" src="http://placehold.it/180" alt="your image" /><br>
+            </span-->
+            <div>
+                <label class="required" for="id_publish_date">Enter MFG date:</label>
+                <input type="date" name="uppdate" id="uppdate" required>
+                <br><span class="timezonewarning">Note: You are 5.5 hours ahead of server time.</span></div>
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+            {%else%}
+            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#signupLong">
+                Signup
+            </button>
+            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#loginLong">
+                Login
+            </button>
+            {% endif %}
+            <a href="/store/productviews/" class="btn btn-outline-success" type="submit">Back</a>
+    </form>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+function myFunction() {
+    document.getElementById("upimg").innerHTML = "<input type='file' name='updateimage' id='updateimage' value='/MEDIA/{{product.image}}' accept='image/*' onchange='readingURL(this);'/><img id='upblah' src='http://placehold.it/180' alt='your image' />"
+}
+
+function readingURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#upblah')
+                .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+setTimeout(function() {
+    if ($('#msg').length > 0) {
+        $('#msg').remove();
+    }
+}, 2000)
+</script>
+{%endblock%}

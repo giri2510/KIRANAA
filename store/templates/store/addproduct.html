@@ -1,0 +1,87 @@
+{%extends 'store/layout.html'%}
+{%block title%}Add Product{%endblock%}
+{%block css%}
+img{
+max-height: 180px;
+max-width: 180px;
+vertical-align: middle;
+border-style: dashed;
+}
+{%endblock%}
+{%block body%}
+{%if messages%}
+{%for message in messages%}
+<div class="alert {{message.tags}}" id="msg" role="alert">
+    {{message}}
+</div>
+{%endfor%}
+{%endif%}
+<div class="container">
+    <form method='post' enctype="multipart/form-data">{%csrf_token%}
+        {% if user.is_authenticated %}
+        <div class="form-group">
+            <label for="merchent">
+                <h3>{{request.user}}</h3>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="product">Product Name</label>
+            <input type="text" class="form-control" id="prodname" name="prodname" placeholder="Enter Product Name">
+        </div>
+        <div class="form-group">
+            <label for="price">Enter Price</label>
+            <input type="text" class="form-control" id="price" name="price" placeholder="Enter Price of Product" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" class="form-control" id="category" name="category" placeholder="Enter Product Category" required>
+        </div>
+        <div class="form-group">
+            <label for="subcategory">Sub-Category</label>
+            <input type="text" class="form-control" id="subcategory" name="subcategory" placeholder="Enter Sub-Category" required>
+        </div>
+        <div class="form-group">
+            <label for="desc">Enter Description</label>
+            <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+        </div>
+        <div>
+            <label>Upload Image</label>
+            <input type='file' name="image" id="image" accept="image/*" onchange="readURL(this);" required />
+            <img id="blah" src="http://placehold.it/180" alt="your image" />
+        </div>
+        <div>
+            <label class="required" for="id_publish_date">Publish date:</label>
+            <input type="date" name="updatedate" required id="updatedate" placeholder="date">
+            <br><span class="timezonewarning">Note: You are 5.5 hours ahead of server time.</span></div>
+        <button type="submit" class="btn btn-outline-success">Submit</button>
+        {%else%}
+        <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#signupLong">
+            Signup
+        </button>
+        <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#loginLong">
+            Login
+        </button>
+        {% endif %}
+        <a href="/store/productviews/" class="btn btn-outline-success" type="submit">View Product</a>
+    </form>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#blah')
+                .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+setTimeout(function() {
+    if ($('#msg').length > 0) {
+        $('#msg').remove();
+    }
+}, 2000)
+</script>
+{%endblock%}

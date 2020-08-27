@@ -1,0 +1,126 @@
+{% extends 'customer/layout.html'%}
+{% block title %} Tracker PAGE {% endblock %}
+{%block css%}
+<style>
+    /* Container needed to position the button. Adjust the width as needed */
+
+
+
+
+/* Style the button and place it in the middle of the container/image */
+ .loginbtn {
+     background-color: white;
+  color: black;
+  border: 2px solid #4CAF50; 
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  width:40%;
+  
+  font-size: 16px;
+  padding: 18px 24px;
+  
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.container .btn:hover {
+  background-color: black;
+}
+</style>
+{%endblock%}
+{%block body%}
+{%load static%}
+{%load%}
+<div class="container">
+    {%if user.is_authenticated%} <div>
+        <div class="col my-4">
+            <h3>Enter your email address and order id to track your order</h3>
+            <form method="post" action="#" id="trackerform">{% csrf_token %}
+                <input type="hidden" name="itemsJson" id="itemsJson">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Order Id</label>
+                        <input type="name" class="form-control" name="orderid" id="orderid" placeholder="Enter Order Id">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                    </div>
+                </div><button type="submit" class="btn btn-primary">Track Order</button>
+        </div>
+    </div>
+    <div class="col my-4">
+        <h3>Your Orders Details </h3>
+        <ul class="list-group" id="checksitems">
+        </ul>
+    </div>
+    <div class="col my-4">
+        <h3>Step 2--> Your order details </h3>
+        <ul class="list-group" id="items">
+        </ul>
+    </div>
+    {%else%}
+    <div class="container" align="center">
+        <img src="{%static 'customer/error1.jpg'%}" alt="" width="1000" height="600">
+        <button class="loginbtn success"><b>It show's You forgot to Login</b></button>
+    </div>
+    {%endif%}
+</div>
+{%endblock%}
+{% block js %}
+<script>
+$('#trackerform').submit(function(event) {
+    $('#items').empty();
+    var formdata = {
+        'orderid': $('input[name=orderid]').val(),
+        'email': $('input[name=email]').val(),
+        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    }
+    $.ajax({
+            type: 'POST',
+            url: '/customer/tracker/',
+            data: formdata,
+            encode: true
+        })
+        .done(function(data) {
+            console.log(data)
+            data = JSON.parse(data);
+            updates = data[0];
+            if (updates.length > 0 & updates != {}) {
+                for (i = 0; i < updates.length; i++) {
+                    let text = updates[i]['text'];
+                    let time = updates[i]['time'];
+
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${text}
+                    <span class="badge badge-primary badge-pill">${time}</span>
+                </li>`
+                    $('#items').append(mystr);
+                }
+            } else {
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    Sorry! We are not able to fetch this order id and email. Make sure to type correct order Id and email
+                    
+                </li>`
+                $('#items').append(mystr);
+            }
+            cart = JSON.parse(data[1])
+            for (item in cart) {
+                let name = cart[item][1];
+                let qty = cart[item][0];
+
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`
+                $('#checksitems').append(mystr);
+            }
+        });
+    event.preventDefault();
+
+});
+</script>
+{% endblock %}
